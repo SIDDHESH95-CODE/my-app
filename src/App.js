@@ -1,34 +1,65 @@
 import './App.css';
-
-import React, { Component } from 'react'
+import About from './components/About';
 import Navbar from './components/Navbar';
-import News from './components/News';
+import Textform from './components/Textform';
+import React, { useState } from 'react'
+import Alert from './components/Alert';
 import {
   BrowserRouter as Router,
   Switch,
-  Route
+  Route,
 } from "react-router-dom";
 
-export default class App extends Component {
-  pageSize = 8;
-  render() {
-    return (
-      <div>
-        <Router>
-          <Navbar />
-          <Switch >
-            <Route exact path="/"> <News key='home' pageSize={this.pageSize} country="in" category='general' /> </Route>
-            {/* <Route exact path="/general"> <News key='general' pageSize={this.pageSize} country="in" category='general' /> </Route> */}
-            <Route exact path="/business"> <News key='business' pageSize={this.pageSize} country="in" category='business' /> </Route>
-            <Route exact path="/entertainment"> <News key='entertainment' pageSize={this.pageSize} country="in" category='entertainment' /> </Route>
-            <Route exact path="/health"> <News key='health' pageSize={this.pageSize} country="in" category='health' /> </Route>
-            <Route exact path="/science"> <News key='science' pageSize={this.pageSize} country="in" category='science' /> </Route>
-            <Route exact path="/sports"> <News key='sports' pageSize={this.pageSize} country="in" category='sports' /> </Route>
-            <Route exact path="/technology"> <News key='technology' pageSize={this.pageSize} country="in" category='technology' /> </Route>
-          </Switch>
-        </Router>
-        {/* <News pageSize={this.pageSize} country="in" category='sports' /> */}
-      </div>
-    )
+
+
+function App(props) {
+  const [mode, setMode] = useState('light');  // Wether dark mode is enabled or not.
+  const [alert, setAlert] = useState(null);
+
+  const togglemode = () => {
+    if (mode === 'light') {
+      setMode('dark');
+      document.body.style.backgroundColor = '#2c3e50';
+      showAlert("Light mode has been enabled", "success")
+    } else {
+      setMode('light');
+      document.body.style.backgroundColor = 'white';
+      showAlert("Dark mode has been enabled", "success")
+    }
   }
+
+  const showAlert = (message, type) => {
+    setAlert({
+      msg: message,
+      type: type
+    })
+    setTimeout(() => {
+      setAlert(null)
+    }, 1500);
+  }
+
+  return (
+    <> 
+      <Router>
+      <Navbar title="Text-Utilities" mode={mode} togglemode={togglemode} />
+      {/* <Navbar/> */}
+
+      <Alert alert={alert} />
+
+      <Switch>
+        <Route path="/about">
+          <About mode={mode}/>
+        </Route>
+        <Route path="/">
+          <Textform heading="Text-Utilities: Word counter, Character counter, Remove Extra Spaces" mode={mode} showAlert={showAlert} />
+        </Route>
+      </Switch>
+
+
+      {/* <About/> */}
+      </Router>
+    </>
+  );
 }
+
+export default App;
