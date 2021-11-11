@@ -1,75 +1,34 @@
-// import logo from './logo.svg';
-import React, { useState } from 'react';
 import './App.css';
-import Alert from './components/Alert';
+
+import React, { Component } from 'react'
 import Navbar from './components/Navbar';
-import TextForm from './components/TextForm';
-import About from './components/About';
+import News from './components/News';
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
+  Route
 } from "react-router-dom";
 
-
-
-function App() {
-  const [mode, setMode] = useState('light');  // Whether dark mode is enabled or not.
-  const [alert, setAlert] = useState(null);
-
-  const showAlert = (message, type)=>{
-    setAlert({
-        msg: message,
-        type: type
-      })
-      setTimeout(() => {
-        setAlert(null)
-      }, 2000);
-    }
-    
-
-  const toggleMode = ()=> {
-    if (mode === 'light') {
-      setMode('dark');
-      document.body.style.backgroundColor = '#2c3e50';
-      showAlert("Dark mode has been enable", "Success");
-      document.title = 'TextUtils - Dark Mode';
-    }
-    else{
-      setMode('light');
-      document.body.style.backgroundColor = 'white';
-      showAlert("Light mode has been enabled", "Success");
-      document.title = 'TextUtils - Light Mode';
-    }
-  }
-
-
-  return (
-    //This is called jsx element.
-    <>
-      <Router>
-      <Navbar title="My app" about="About Us" mode={mode} toggleMode={toggleMode}/>
-      {/* for the default props  */}
-      {/* <Navbar/> */}
-      {/* <Navbar title="My app"/> */}
-
-      <Alert alert={alert}/>
-        <div className="container my-3">
-        <Switch>
-            {/* exact defines the exact path of that page & not page in between. */}
-            <Route exact path="/about">
-              <About />
-            </Route>
-            <Route exact path="/">
-              <TextForm showAlert={showAlert} heading="Enter the text to analyze.." mode={mode}/>
-            </Route>
+export default class App extends Component {
+  pageSize = 8;
+  render() {
+    return (
+      <div>
+        <Router>
+          <Navbar />
+          <Switch >
+            <Route exact path="/"> <News key='home' pageSize={this.pageSize} country="in" category='general' /> </Route>
+            {/* <Route exact path="/general"> <News key='general' pageSize={this.pageSize} country="in" category='general' /> </Route> */}
+            <Route exact path="/business"> <News key='business' pageSize={this.pageSize} country="in" category='business' /> </Route>
+            <Route exact path="/entertainment"> <News key='entertainment' pageSize={this.pageSize} country="in" category='entertainment' /> </Route>
+            <Route exact path="/health"> <News key='health' pageSize={this.pageSize} country="in" category='health' /> </Route>
+            <Route exact path="/science"> <News key='science' pageSize={this.pageSize} country="in" category='science' /> </Route>
+            <Route exact path="/sports"> <News key='sports' pageSize={this.pageSize} country="in" category='sports' /> </Route>
+            <Route exact path="/technology"> <News key='technology' pageSize={this.pageSize} country="in" category='technology' /> </Route>
           </Switch>
-
-        </div>
-    {/* <div classNameName="blank">Lovely</div> */}
-      </Router>
-    </>
-  );
+        </Router>
+        {/* <News pageSize={this.pageSize} country="in" category='sports' /> */}
+      </div>
+    )
+  }
 }
-
-export default App;
